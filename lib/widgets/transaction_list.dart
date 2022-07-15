@@ -37,35 +37,50 @@ class TransactionList extends StatelessWidget {
                   subtitle: Text(
                     DateFormat.yMMMd().format(transactions[index].date),
                   ),
-                  trailing: IconButton(
-                    onPressed: () => removeTransaction(transactions[index].id),
-                    icon: Icon(
-                      Icons.delete,
-                      color: Theme.of(context).errorColor,
-                    ),
-                  ),
+                  trailing: MediaQuery.of(context).size.width > 360
+                      ? TextButton.icon(
+                          icon: const Icon(Icons.delete),
+                          label: const Text('Delete'),
+                          style: TextButton.styleFrom(
+                            primary: Theme.of(context).errorColor,
+                          ),
+                          onPressed: () =>
+                              removeTransaction(transactions[index].id),
+                        )
+                      : IconButton(
+                          onPressed: () =>
+                              removeTransaction(transactions[index].id),
+                          icon: Icon(
+                            Icons.delete,
+                            color: Theme.of(context).errorColor,
+                          ),
+                        ),
                 ),
               );
             },
             itemCount: transactions.length,
           )
-        : Column(
-            children: <Widget>[
-              Text(
-                'No Transactions added yet!',
-                style: Theme.of(context).textTheme.headline6,
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              SizedBox(
-                height: 200,
-                child: Image.asset(
-                  'assets/images/waiting.png',
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ],
+        : LayoutBuilder(
+            builder: (context, constraints) {
+              return Column(
+                children: <Widget>[
+                  Text(
+                    'No Transactions added yet!',
+                    style: Theme.of(context).textTheme.headline6,
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  SizedBox(
+                    height: constraints.maxHeight * 0.6,
+                    child: Image.asset(
+                      'assets/images/waiting.png',
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ],
+              );
+            },
           );
   }
 }
